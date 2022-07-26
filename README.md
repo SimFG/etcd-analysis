@@ -24,12 +24,40 @@ $ etcdctl+ distribute -h
 View data distribution in etcd.
 ```shell
 $ etcdctl+ distribute
+
+Summary:
+  Count:        116.
+  Total:        7.3 KB.
+  Smallest:     22.0 B.
+  Largest:      85.0 B.
+  Average:      64.0 B.
+
+Size histogram:
+  22.0 B [1]    |
+  34.0 B [6]    |∎∎∎
+  46.0 B [29]   |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  58.0 B [13]   |∎∎∎∎∎∎∎
+  70.0 B [1]    |
+  85.0 B [66]   |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+
+Size distribution:
+  10% in 38.0 B.
+  25% in 39.0 B.
+  50% in 76.0 B.
+  75% in 83.0 B.
+  90% in 85.0 B.
 ```
 
 ### look
 Get all data in etcd, and you can use system tools to search.
 ```shell
 $ etcdctl+ look | more
+
+Current Stage
+  cluster_id:2037210783374497686 member_id:13195394291058371180 revision:254946 raft_term:9 
+Kv List
+| Key | Value | CreateRevision | ModRevision | Version | Lease |
+| by-dev/kv/gid/idTimestamp | - | 253775 | 254802 | 12 | 0 |
 ```
 - Case 1:  Get all the data continuously and display it on the console
 ```shell
