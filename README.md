@@ -27,7 +27,15 @@ $ etcdctl+ distribute
 ```
 
 ### look
-Get all data in etcd
+Get all data in etcd, and you can use system tools to search.
 ```shell
-$ etcdctl+ look
+$ etcdctl+ look | more
+```
+- Case 1:  Get all the data continuously and display it on the console
+```shell
+$ etcdctl+ look --write-out=file --hang=true
+
+# New Terminal
+$ vim analysis.txt
+# update the file in vim, using `:e`
 ```
