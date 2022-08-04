@@ -67,3 +67,12 @@ $ etcdctl+ look --write-out=file --hang=true
 $ vim analysis.txt
 # update the file in vim, using `:e`
 ```
+
+### leader
+Get the leader node info
+```shell
+$ etcdctl+ leader
+
+Name: default
+ClientUrls: [http://127.0.0.1:2379]
+```

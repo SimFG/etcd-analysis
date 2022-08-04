@@ -12,7 +12,7 @@ var (
 	client *clientv3.Client
 )
 
-func InitClient() {
+func InitClient() *clientv3.Client {
 	connEndpoints := []string{"127.0.0.1:2379"}
 
 	l := len(C.Endpoints)
@@ -30,6 +30,7 @@ func InitClient() {
 		os.Exit(1)
 	}
 	client = c
+	return client
 }
 
 func GetAllData() *clientv3.GetResponse {

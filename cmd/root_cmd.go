@@ -33,4 +33,5 @@ func init() {
 
 	rootCmd.AddCommand(NewDistributeCmd())
 	rootCmd.AddCommand(NewLookCmd())
+	rootCmd.AddCommand(NewLeaderCmd())
 }
