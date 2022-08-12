@@ -21,7 +21,7 @@ $ etcdctl+ distribute -h
 ```
 ## Function List
 ### distribute
-View data distribution in etcd.
+View data distribution in etcd according to the `key` size , `value` size or `key + value` size by setting the `type` command param.
 ```shell
 $ etcdctl+ distribute
 
@@ -59,13 +59,23 @@ Kv List
 | Key | Value | CreateRevision | ModRevision | Version | Lease |
 | by-dev/kv/gid/idTimestamp | - | 253775 | 254802 | 12 | 0 |
 ```
-- Case 1:  Get all the data continuously and display it on the console
+- Case 1:  Get all data continuously and display it on the console
 ```shell
 $ etcdctl+ look --write-out=file --hang=true
 
 # New Terminal
 $ vim analysis.txt
 # update the file in vim, using `:e`
+```
+- Case 2:  Get the kv data of the specified size range.
+```shell
+$ etcdctl+ look --filter=key --filter-min=74 --filter-max=100
+
+Current Stage
+  cluster_id:2037210783374497686 member_id:13195394291058371180 revision:326021 raft_term:14 
+Kv List
+| Key | Value | CreateRevision | ModRevision | Version | Lease |
+| by-dev/meta/channelwatch/-9223372036854775808/by-dev-rootcoord-dml_4_435191634150817793v0 | - | 326013 | 326013 | 1 | 0 |
 ```
 
 ### leader
