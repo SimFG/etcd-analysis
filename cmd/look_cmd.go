@@ -68,7 +68,7 @@ Sometimes, you may only want to observe data of a certain range size, you can se
 
 func lookFunc(cmd *cobra.Command, args []string) {
 	core.InitClient()
-	resp := core.GetAllData()
+	resp, datac := core.GetAllData()
 
 	var writer io.Writer
 	switch writeOut {
@@ -81,15 +81,15 @@ func lookFunc(cmd *cobra.Command, args []string) {
 	default:
 		writer = os.Stdout
 	}
-	appendBuffer(resp, writer)
+	appendBuffer(resp, datac, writer)
 	if hang && writeOut == "file" {
 		ct := time.Tick(time.Second * time.Duration(hangInterval))
 		i := 0
 		for {
 			select {
 			case <-ct:
-				resp = core.GetAllData()
-				appendBuffer(resp, writer)
+				resp, datac = core.GetAllData()
+				appendBuffer(resp, datac, writer)
 				fmt.Println(i, "flush...")
 				i++
 			}
@@ -97,7 +97,7 @@ func lookFunc(cmd *cobra.Command, args []string) {
 	}
 }
 
-func appendBuffer(resp *clientv3.GetResponse, writer io.Writer) {
+func appendBuffer(resp *clientv3.GetResponse, datac <-chan []*mvccpb.KeyValue, writer io.Writer) {
 	if f, ok := writer.(*os.File); ok {
 		f.Truncate(0)
 		f.Seek(0, 0)
@@ -107,8 +107,9 @@ func appendBuffer(resp *clientv3.GetResponse, writer io.Writer) {
 	buffer.WriteString(fmt.Sprintf("  %s", resp.Header.String()))
 	buffer.WriteString("\nKv List\n")
 	buffer.WriteString("| Key | Value | Size | CreateRevision | ModRevision | Version | Lease |\n")
-	if len(resp.Kvs) > 0 {
-		for _, kv := range resp.Kvs {
+
+	for data := range datac {
+		for _, kv := range data {
 			size, ok := filter(kv)
 			if ok {
 				continue
@@ -123,8 +124,6 @@ func appendBuffer(resp *clientv3.GetResponse, writer io.Writer) {
 				kv.CreateRevision, kv.ModRevision, kv.Version,
 				kv.Lease))
 		}
-	} else {
-		buffer.WriteString("Empty Data\n")
 	}
 
 	buffer.WriteTo(writer)

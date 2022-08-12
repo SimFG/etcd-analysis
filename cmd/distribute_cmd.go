@@ -74,7 +74,7 @@ Size distribution:
 
 func distributeFunc(cmd *cobra.Command, args []string) {
 	core.InitClient()
-	resp := core.GetAllData()
+	_, datac := core.GetAllData()
 
 	sizeOf := func(kv *mvccpb.KeyValue) int {
 		switch distributeType {
@@ -92,7 +92,9 @@ func distributeFunc(cmd *cobra.Command, args []string) {
 	c1 := r.Results()
 	go func() {
 		defer close(c1)
-		c1 <- resp.Kvs
+		for data := range datac {
+			c1 <- data
+		}
 	}()
 	fmt.Println(<-r.Run())
 }
