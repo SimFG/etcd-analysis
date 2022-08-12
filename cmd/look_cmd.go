@@ -140,7 +140,10 @@ func filter(kv *mvccpb.KeyValue) bool {
 	default:
 		size = -1
 	}
-	if size < 0 || (filterMin < 0 && filterMax < 0) || (size >= filterMin && size <= filterMax) {
+
+	if size < 0 || (filterMin < 0 && filterMax < 0) ||
+		(size >= filterMin && filterMax < 0) || (filterMin < 0 && size <= filterMax) ||
+		(size >= filterMin && size <= filterMax) {
 		return false
 	}
 	return true
