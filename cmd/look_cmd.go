@@ -106,18 +106,20 @@ func appendBuffer(resp *clientv3.GetResponse, writer io.Writer) {
 	buffer.WriteString("\nCurrent Stage\n")
 	buffer.WriteString(fmt.Sprintf("  %s", resp.Header.String()))
 	buffer.WriteString("\nKv List\n")
-	buffer.WriteString("| Key | Value | CreateRevision | ModRevision | Version | Lease |\n")
+	buffer.WriteString("| Key | Value | Size | CreateRevision | ModRevision | Version | Lease |\n")
 	if len(resp.Kvs) > 0 {
 		for _, kv := range resp.Kvs {
-			if filter(kv) {
+			size, ok := filter(kv)
+			if ok {
 				continue
 			}
 			v := "-"
 			if showValue {
 				v = string(kv.Value)
 			}
-			buffer.WriteString(fmt.Sprintf("| %s | %s | %d | %d | %d | %d |\n",
+			buffer.WriteString(fmt.Sprintf("| %s | %s | %s | %d | %d | %d | %d |\n",
 				string(kv.Key), v,
+				core.ReadableSize(size),
 				kv.CreateRevision, kv.ModRevision, kv.Version,
 				kv.Lease))
 		}
@@ -128,7 +130,7 @@ func appendBuffer(resp *clientv3.GetResponse, writer io.Writer) {
 	buffer.WriteTo(writer)
 }
 
-func filter(kv *mvccpb.KeyValue) bool {
+func filter(kv *mvccpb.KeyValue) (int, bool) {
 	size := -1
 	switch filterAttribute {
 	case "key":
@@ -141,12 +143,15 @@ func filter(kv *mvccpb.KeyValue) bool {
 		size = -1
 	}
 
-	if size < 0 || (filterMin < 0 && filterMax < 0) ||
-		(size >= filterMin && filterMax < 0) || (filterMin < 0 && size <= filterMax) ||
-		(size >= filterMin && size <= filterMax) {
-		return false
+	if size < 0 || (filterMin < 0 && filterMax < 0) {
+		return binary.Size(kv.Key) + binary.Size(kv.Value), false
 	}
-	return true
+
+	if (size >= filterMin && filterMax < 0) || (filterMin < 0 && size <= filterMax) ||
+		(size >= filterMin && size <= filterMax) {
+		return size, false
+	}
+	return size, true
 }
 
 func GetFileWriter() *os.File {

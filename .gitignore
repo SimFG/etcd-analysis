@@ -1,5 +1,6 @@
 .idea
 .swp
+.DS_Store
 analysis.txt
 PLAN.MD
 etcdctl+
