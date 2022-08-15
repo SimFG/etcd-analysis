@@ -86,3 +86,11 @@ $ etcdctl+ leader
 Name: default
 ClientUrls: [http://127.0.0.1:2379]
 ```
+
+### clear
+Clear all etcd data
+```shell
+$ etcdctl+ clear
+
+Clear All Data, (Y/n):
+```
