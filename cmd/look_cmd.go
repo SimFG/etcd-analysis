@@ -103,7 +103,7 @@ func appendBuffer(resp *clientv3.GetResponse, datac <-chan []*mvccpb.KeyValue, w
 		f.Seek(0, 0)
 	}
 	var buffer bytes.Buffer
-	buffer.WriteString("\nCurrent Stage\n")
+	buffer.WriteString("Current Stage\n")
 	buffer.WriteString(fmt.Sprintf("  %s", resp.Header.String()))
 	buffer.WriteString("\nKv List\n")
 	buffer.WriteString("| Key | Value | Size | CreateRevision | ModRevision | Version | Lease |\n")
