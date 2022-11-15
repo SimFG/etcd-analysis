@@ -35,4 +35,5 @@ func init() {
 	rootCmd.AddCommand(NewLookCmd())
 	rootCmd.AddCommand(NewLeaderCmd())
 	rootCmd.AddCommand(NewClearCmd())
+	rootCmd.AddCommand(NewFindCmd())
 }

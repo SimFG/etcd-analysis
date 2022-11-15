@@ -49,7 +49,7 @@ Sometimes, you may only want to observe data of a certain range size, you can se
 		Run: lookFunc,
 	}
 
-	cmd.Flags().BoolVar(&showValue, "show-value", false, "Get keys with matching prefix")
+	cmd.Flags().BoolVar(&showValue, "show-value", false, "Show the value or not")
 	cmd.Flags().StringVar(&writeOut, "write-out", "stdout", "The looking type")
 	cmd.Flags().BoolVar(&hang, "hang", false, "Get updates periodically, only '--write-out=file' takes effect")
 	cmd.Flags().Int64Var(&hangInterval, "hang-interval", 2, "Update interval, and the unit is 's'")
