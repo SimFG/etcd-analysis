@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/SimFG/etcd-analysis/core"
 	"github.com/spf13/cobra"
+	cobracompletefig "github.com/withfig/autocomplete-tools/integrations/cobra"
 	"os"
 )
 
@@ -33,4 +34,6 @@ func init() {
 	rootCmd.AddCommand(NewLeaderCmd())
 	rootCmd.AddCommand(NewClearCmd())
 	rootCmd.AddCommand(NewFindCmd())
+	rootCmd.AddCommand(NewDecodeCmd())
+	rootCmd.AddCommand(cobracompletefig.CreateCompletionSpecCommand())
 }

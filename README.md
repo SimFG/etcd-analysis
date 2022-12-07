@@ -20,7 +20,7 @@ Get help with functions
 $ etcdctl+ distribute -h
 ```
 ### Auto complete config
-Download the [etcdctl+.ts](etcdctl+.ts), and [config it](https://simfg.github.io/fig). You can also use the [etcdctl.ts](etcdctl.ts) config the `etcdctl` command.
+Download the [etcdctl+.ts](ts/etcdctl+.ts), and [config it](https://simfg.github.io/fig). You can also use the [etcdctl.ts](ts/etcdctl.ts) config the `etcdctl` command.
 
 ## Function List
 ### distribute
