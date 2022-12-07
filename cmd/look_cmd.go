@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"github.com/SimFG/etcd-analysis/core"
@@ -116,7 +117,7 @@ func appendBuffer(resp *clientv3.GetResponse, datac <-chan []*mvccpb.KeyValue, w
 			}
 			v := "-"
 			if showValue {
-				v = string(kv.Value)
+				v = base64.StdEncoding.EncodeToString(kv.Value)
 			}
 			buffer.WriteString(fmt.Sprintf("| %s | %s | %s | %d | %d | %d | %d |\n",
 				string(kv.Key), v,

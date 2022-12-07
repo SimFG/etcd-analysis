@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"github.com/SimFG/etcd-analysis/core"
 	"github.com/spf13/cobra"
@@ -55,7 +56,7 @@ func appendBufferForFind(resp *clientv3.GetResponse, datac <-chan []*mvccpb.KeyV
 			}
 			v := ""
 			if containValue {
-				v = string(kv.Value)
+				v = base64.StdEncoding.EncodeToString(kv.Value)
 			}
 			buffer.WriteString(fmt.Sprintf("| %s | %s |\n",
 				key, v))
