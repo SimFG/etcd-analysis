@@ -19,6 +19,9 @@ Get help with functions
 ```shell
 $ etcdctl+ distribute -h
 ```
+### Auto complete config
+Download the [etcdctl+.ts](etcdctl+.ts), and [config it](https://simfg.github.io/fig). You can also use the [etcdctl.ts](etcdctl.ts) config the `etcdctl` command.
+
 ## Function List
 ### distribute
 View data distribution in etcd according to the `key` size , `value` size or `key + value` size by setting the `type` command param.

@@ -10,10 +10,7 @@ import (
 var (
 	rootCmd = &cobra.Command{
 		Use:   "etcdctl+",
-		Short: "short tips for the command",
-		Long: `long long
-long tips for the command
-	`,
+		Short: "etcd data analysis tool",
 	}
 )
 

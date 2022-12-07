@@ -33,7 +33,7 @@ func NewLookCmd() *cobra.Command {
 Look all etcd data.
 
 Considering that the value is generally encrypted and difficult to read and is relatively long, the value is not displayed by default.
-If you want to display, you can set <show-value> to true.
+If you want to display, you can set <show-value> to true. The print value has been decode by base64, you can decode command to decode the value.
 
 By default, the command will output all the results to the console, which may be more practical in combination with some text viewing tools, such as 'more' or 'vim', like:
 $ look | more

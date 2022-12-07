@@ -56,7 +56,7 @@ const completionSpec: Fig.Spec = {
                 {
                     name: ["--bucket"],
                     description: "Bucket Count",
-                    args: [{ name: "bucket", default: "5" }],
+                    args: [{ name: "bucket", default: "5", suggestions: ["5", "6", "7", "8", "9", "10"] }],
                 },
                 {
                     name: ["--type"],
@@ -77,7 +77,7 @@ const completionSpec: Fig.Spec = {
                 {
                     name: ["--limit"],
                     description: "The limit of the show keys",
-                    args: [{ name: "limit", default: "10" }],
+                    args: [{ name: "limit", default: "10", suggestions: ["5", "10", "15", "20"] }],
                 },
                 { name: ["--value"], description: "Show the value or not" },
             ],
@@ -106,11 +106,12 @@ const completionSpec: Fig.Spec = {
                     name: ["--hang"],
                     description:
                         "Get updates periodically, only '--write-out=file' takes effect",
+                    args: [{ name: "hang", default: "false", suggestions: ["false", "true"] }],
                 },
                 {
                     name: ["--hang-interval"],
                     description: "Update interval, and the unit is 's'",
-                    args: [{ name: "hang-interval", default: "2" }],
+                    args: [{ name: "hang-interval", default: "2", suggestions: ["1", "2", "3"] }],
                 },
                 { name: ["--show-value"], description: "Show the value or not" },
                 {
