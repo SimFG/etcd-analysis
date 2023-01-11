@@ -59,12 +59,16 @@ Sometimes, you may only want to observe data of a certain range size, you can se
 	cmd.Flags().IntVar(&filterMin, "filter-min", -1, "The filter min value")
 
 	cmd.RegisterFlagCompletionFunc("write-out", func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return []string{"stdout", "file"}, cobra.ShellCompDirectiveDefault
+		return []string{"stdout", "file", "log"}, cobra.ShellCompDirectiveDefault
 	})
 	cmd.RegisterFlagCompletionFunc("filter", func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return []string{"none", "key", "value", "kv"}, cobra.ShellCompDirectiveDefault
 	})
 	return cmd
+}
+
+func isLog() bool {
+	return writeOut == "log"
 }
 
 func lookFunc(cmd *cobra.Command, args []string) {
@@ -73,7 +77,7 @@ func lookFunc(cmd *cobra.Command, args []string) {
 
 	var writer io.Writer
 	switch writeOut {
-	case "file":
+	case "file", "log":
 		f := GetFileWriter()
 		defer f.Close()
 		writer = f
@@ -104,10 +108,12 @@ func appendBuffer(resp *clientv3.GetResponse, datac <-chan []*mvccpb.KeyValue, w
 		f.Seek(0, 0)
 	}
 	var buffer bytes.Buffer
-	buffer.WriteString("Current Stage\n")
-	buffer.WriteString(fmt.Sprintf("  %s", resp.Header.String()))
-	buffer.WriteString("\nKv List\n")
-	buffer.WriteString("| Key | Value | Size | CreateRevision | ModRevision | Version | Lease |\n")
+	if !isLog() {
+		buffer.WriteString("Current Stage\n")
+		buffer.WriteString(fmt.Sprintf("  %s", resp.Header.String()))
+		buffer.WriteString("\nKv List\n")
+		buffer.WriteString("| Key | Value | Size | CreateRevision | ModRevision | Version | Lease |\n")
+	}
 
 	for data := range datac {
 		for _, kv := range data {
@@ -119,7 +125,11 @@ func appendBuffer(resp *clientv3.GetResponse, datac <-chan []*mvccpb.KeyValue, w
 			if showValue {
 				v = base64.StdEncoding.EncodeToString(kv.Value)
 			}
-			buffer.WriteString(fmt.Sprintf("| %s | %s | %s | %d | %d | %d | %d |\n",
+			format := "| %s | %s | %s | %d | %d | %d | %d |\n"
+			if isLog() {
+				format = "key=%s value=%s size=%s create_revision=%d mod_revision=%d version=%d lease=%d\n"
+			}
+			buffer.WriteString(fmt.Sprintf(format,
 				string(kv.Key), v,
 				core.ReadableSize(size),
 				kv.CreateRevision, kv.ModRevision, kv.Version,

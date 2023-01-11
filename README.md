@@ -23,6 +23,14 @@ $ etcdctl+ distribute -h
 Download the [etcdctl+.ts](ts/etcdctl+.ts), and [config it](https://simfg.github.io/fig). You can also use the [etcdctl.ts](https://simfg.github.io/etcdctl.ts) config the `etcdctl` command.
 
 ## Function List
+
+1. **distribute** View data distribution according to data size
+2. **look** Show or export all the etcd data, and be used with terminal or loki
+3. **find** Get key based on certain characters
+4. **leader** Get the leader node info
+5. **clear** Clear all the etcd data
+6. **decode** decode the etcd value that is encoded 
+
 ### distribute
 View data distribution in etcd according to the `key` size , `value` size or `key + value` size by setting the `type` command param.
 ```shell
@@ -79,6 +87,19 @@ Current Stage
 Kv List
 | Key | Value | CreateRevision | ModRevision | Version | Lease |
 | by-dev/meta/channelwatch/-9223372036854775808/by-dev-rootcoord-dml_4_435191634150817793v0 | - | 326013 | 326013 | 1 | 0 |
+```
+
+### find
+Get key based on certain characters
+```shell
+$ ./etcdctl+ find --key=index
+Kv List
+| Key | Value |
+| by-dev/meta/field-index/438660758500016136/438660903999573339 |  |
+| by-dev/meta/segment-index/438660758500016136/438660758500016137/438660758500216145/438660903999573340 |  |
+| by-dev/meta/segment-index/438660758500016136/438660758500016137/438660758500216146/438660903999573341 |  |
+| by-dev/meta/segment-index/438660758500016136/438660758500016137/438672571137461581/438672571137461597 |  |
+| by-dev/meta/segment-index/438660758500016136/438660758500016137/438672571137461582/438672571137461598 |  |
 ```
 
 ### leader

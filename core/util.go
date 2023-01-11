@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	byteUnits = []string{"B", "KB", "MB", "GB"}
+	byteUnits = []string{"b", "kb", "mb", "gb", "tb", "pb", "eb"}
 )
 
 func Exit(err error) {
@@ -42,7 +42,7 @@ func ReadableSize(s int) string {
 		i++
 		sf /= 1024
 	}
-	return fmt.Sprintf("%.1f %s", sf, byteUnits[i])
+	return fmt.Sprintf("%.1f%s", sf, byteUnits[i])
 }
 
 func Interrupt(f func()) {
