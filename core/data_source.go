@@ -29,6 +29,16 @@ func InitClient() *clientv3.Client {
 		Endpoints: connEndpoints,
 	}
 
+	if C.TLS.CertFile != "" && C.TLS.KeyFile != "" && C.TLS.TrustedCAFile != "" {
+		tlsConfig, err := C.TLS.ClientConfig()
+		if err != nil {
+			fmt.Errorf("failed to get etcd tls config, err is %v", err)
+			os.Exit(1)
+		}
+		cfg.TLS = tlsConfig
+		cfg.TLS.InsecureSkipVerify = true
+	}
+
 	c, err := clientv3.New(cfg)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "dial error: %v\n", err)
