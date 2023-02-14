@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
+
 	"github.com/SimFG/etcd-analysis/core"
 	"github.com/spf13/cobra"
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -29,7 +29,7 @@ func clearFunc(cmd *cobra.Command, args []string) {
 	if enter != "Y" {
 		return
 	}
-	_, err = client.Delete(context.Background(), core.EmptyChar(), clientv3.WithFromKey())
+	err = core.EtcdDelete(client, core.EmptyChar(), clientv3.WithFromKey())
 	if err != nil {
 		core.Exit(err)
 	}

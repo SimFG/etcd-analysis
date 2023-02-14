@@ -3,10 +3,11 @@ package core
 import (
 	"bytes"
 	"fmt"
-	"go.etcd.io/etcd/api/v3/mvccpb"
 	"math"
 	"sort"
 	"strings"
+
+	"go.etcd.io/etcd/api/v3/mvccpb"
 )
 
 const (

@@ -7,6 +7,7 @@ var (
 )
 
 type Cfg struct {
-	Endpoints []string
-	TLS       transport.TLSInfo
+	Endpoints      []string
+	TLS            transport.TLSInfo
+	CommandTimeout int
 }

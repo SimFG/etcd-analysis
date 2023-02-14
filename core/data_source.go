@@ -1,12 +1,12 @@
 package core
 
 import (
-	"context"
 	"fmt"
+	"math/rand"
+	"time"
+
 	"go.etcd.io/etcd/api/v3/mvccpb"
 	clientv3 "go.etcd.io/etcd/client/v3"
-	"math/rand"
-	"os"
 )
 
 const (
@@ -32,8 +32,7 @@ func InitClient() *clientv3.Client {
 	if C.TLS.CertFile != "" && C.TLS.KeyFile != "" && C.TLS.TrustedCAFile != "" {
 		tlsConfig, err := C.TLS.ClientConfig()
 		if err != nil {
-			fmt.Errorf("failed to get etcd tls config, err is %v", err)
-			os.Exit(1)
+			Exit(fmt.Errorf("failed to get etcd tls config, err is %v", err))
 		}
 		cfg.TLS = tlsConfig
 		cfg.TLS.InsecureSkipVerify = true
@@ -41,8 +40,12 @@ func InitClient() *clientv3.Client {
 
 	c, err := clientv3.New(cfg)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "dial error: %v\n", err)
-		os.Exit(1)
+		Exit(fmt.Errorf("dial error: %v\n", err))
+	}
+	EtcdOpTimeout = time.Duration(C.CommandTimeout) * time.Second
+	err = EtcdStatus(c)
+	if err != nil {
+		Exit(fmt.Errorf("unvaliable etcd server, error: %v\n", err))
 	}
 	client = c
 	return client
@@ -52,7 +55,7 @@ func GetAllData() (*clientv3.GetResponse, <-chan []*mvccpb.KeyValue) {
 	c := make(chan []*mvccpb.KeyValue, 10)
 
 	getFunc := func(start string, count int64) *clientv3.GetResponse {
-		resp, err := client.Get(context.Background(), start, clientv3.WithFromKey(),
+		resp, err := EtcdGet(client, start, clientv3.WithFromKey(),
 			clientv3.WithSerializable(),
 			//clientv3.WithSort(clientv3.SortByKey, clientv3.SortAscend),
 			clientv3.WithLimit(count))
