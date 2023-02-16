@@ -118,3 +118,13 @@ $ etcdctl+ clear
 
 Clear All Data, (Y/n):
 ```
+
+# All contributors
+
+<a href="https://github.com/SimFG/etcd-analysis/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=SimFG/etcd-analysis" />
+</a>
+
+# Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/SimFG/etcd-analysis.svg)](https://starchart.cc/SimFG/etcd-analysis)
