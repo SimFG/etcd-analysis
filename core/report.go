@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	barChar = "*"
+	barChar = "∎"
 )
 
 type Stats struct {
