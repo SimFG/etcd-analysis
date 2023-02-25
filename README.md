@@ -33,6 +33,9 @@ Download the [etcdctl+.ts](ts/etcdctl+.ts), and [config it](https://simfg.github
 
 ### distribute
 View data distribution in etcd according to the `key` size , `value` size or `key + value` size by setting the `type` command param.
+
+![distribute.gif](pic/20230225-142920.gif)
+
 ```shell
 $ etcdctl+ distribute
 
@@ -45,11 +48,11 @@ Summary:
 
 Size histogram:
   22.0 B [1]    |
-  34.0 B [6]    |∎∎∎
-  46.0 B [29]   |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
-  58.0 B [13]   |∎∎∎∎∎∎∎
+  34.0 B [6]    |***
+  46.0 B [29]   |*****************
+  58.0 B [13]   |*******
   70.0 B [1]    |
-  85.0 B [66]   |∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎∎
+  85.0 B [66]   |****************************************
 
 Size distribution:
   10% in 38.0 B.

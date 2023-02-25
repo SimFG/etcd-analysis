@@ -32,9 +32,7 @@ func PrintPercent(sizes []int, sizeToCount map[int]int) string {
 	var buffer bytes.Buffer
 	buffer.WriteString("\nSize distribution:\n")
 	for i := 0; i < len(pctls); i++ {
-		if data[i] > 0 {
-			buffer.WriteString(fmt.Sprintf("  %d%% in %s.\n", int(pctls[i]), ReadableSize(data[i])))
-		}
+		buffer.WriteString(fmt.Sprintf("  %d%% in %s.\n", int(pctls[i]), ReadableSize(data[i])))
 	}
 	return buffer.String()
 }

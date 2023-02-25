@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"encoding/binary"
-	"fmt"
+
 	"github.com/SimFG/etcd-analysis/core"
 	"github.com/spf13/cobra"
 	"go.etcd.io/etcd/api/v3/mvccpb"
@@ -92,9 +92,12 @@ func distributeFunc(cmd *cobra.Command, args []string) {
 	c1 := r.Results()
 	go func() {
 		defer close(c1)
+		if len(datac) > 0 {
+			r.DynamicOutput()
+		}
 		for data := range datac {
 			c1 <- data
 		}
 	}()
-	fmt.Println(<-r.Run())
+	<-r.Run()
 }

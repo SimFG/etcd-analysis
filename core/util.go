@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"syscall"
 )
 
 var (
@@ -47,10 +46,10 @@ func ReadableSize(s int) string {
 
 func Interrupt(f func()) {
 	go func() {
-		c := make(chan os.Signal)
-		signal.Notify(c)
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt)
 		s := <-c
-		if s == syscall.SIGINT {
+		if s == os.Interrupt {
 			fmt.Println("interrupt")
 			f()
 			Exit(errors.New("signal: interrupt"))
