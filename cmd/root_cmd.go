@@ -40,5 +40,6 @@ func init() {
 	rootCmd.AddCommand(NewClearCmd())
 	rootCmd.AddCommand(NewFindCmd())
 	rootCmd.AddCommand(NewDecodeCmd())
+	rootCmd.AddCommand(NewRenameCmd())
 	rootCmd.AddCommand(cobracompletefig.CreateCompletionSpecCommand())
 }
