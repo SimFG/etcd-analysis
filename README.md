@@ -3,7 +3,9 @@ etcd is generally used to store system metadata or service discovery, and is sui
 
 When testing the stability of the system, it may be necessary to pay attention to the size distribution of the data currently stored in etcd by the system. That's why this project came about.
 
-# Getting started
+<details>
+<summary><h1>Getting started</h1></summary>
+
 ## Getting the source code
 Clone this code repository
 ```shell
@@ -19,19 +21,23 @@ Get help with functions
 ```shell
 $ etcdctl+ distribute -h
 ```
-### Auto complete config
+## Auto complete config
 Download the [etcdctl+.ts](ts/etcdctl+.ts), and [config it](https://simfg.github.io/fig). You can also use the [etcdctl.ts](https://simfg.github.io/etcdctl.ts) config the `etcdctl` command.
+</details>
 
-## Function List
+<details open>
+<summary><h1>Function List</h1></summary>
+
 
 1. **distribute** View data distribution according to data size
 2. **look** Show or export all the etcd data, and be used with terminal or loki
 3. **find** Get key based on certain characters
 4. **leader** Get the leader node info
 5. **clear** Clear all the etcd data
-6. **decode** decode the etcd value that is encoded 
+6. **decode** Decode the etcd value that is encoded 
+7. **rename** Rename the etcd data key
 
-### distribute
+## distribute
 View data distribution in etcd according to the `key` size , `value` size or `key + value` size by setting the `type` command param.
 
 ![distribute.gif](pic/20230225-150850.gif)
@@ -62,7 +68,7 @@ Size distribution:
   90% in 85.0 B.
 ```
 
-### look
+## look
 Get all data in etcd, and you can use system tools to search.
 ```shell
 $ etcdctl+ look | more
@@ -92,7 +98,7 @@ Kv List
 | by-dev/meta/channelwatch/-9223372036854775808/by-dev-rootcoord-dml_4_435191634150817793v0 | - | 326013 | 326013 | 1 | 0 |
 ```
 
-### find
+## find
 Get key based on certain characters
 ```shell
 $ ./etcdctl+ find --key=index
@@ -105,7 +111,7 @@ Kv List
 | by-dev/meta/segment-index/438660758500016136/438660758500016137/438672571137461582/438672571137461598 |  |
 ```
 
-### leader
+## leader
 Get the leader node info
 ```shell
 $ etcdctl+ leader
@@ -114,13 +120,15 @@ Name: default
 ClientUrls: [http://127.0.0.1:2379]
 ```
 
-### clear
+## clear
 Clear all etcd data
 ```shell
 $ etcdctl+ clear
 
 Clear All Data, (Y/n):
 ```
+
+</details>
 
 # All contributors
 
