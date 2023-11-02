@@ -4,17 +4,19 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"io"
+	"os"
+	"strings"
+
 	"github.com/SimFG/etcd-analysis/core"
 	"github.com/spf13/cobra"
 	"go.etcd.io/etcd/api/v3/mvccpb"
 	clientv3 "go.etcd.io/etcd/client/v3"
-	"io"
-	"os"
-	"strings"
 )
 
 var (
 	findKey      = ""
+	findPrefix   = ""
 	containValue = false
 	findLimit    = 10
 )
@@ -27,6 +29,7 @@ func NewFindCmd() *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&findKey, "key", "", "Show the data like the key")
+	cmd.Flags().StringVar(&findPrefix, "prefix", "", "Show the data like the prefix")
 	cmd.Flags().BoolVar(&containValue, "value", false, "Show the value or not")
 	cmd.Flags().IntVar(&findLimit, "limit", 10, "The limit of the show keys")
 	return cmd
@@ -34,7 +37,7 @@ func NewFindCmd() *cobra.Command {
 
 func findFunc(cmd *cobra.Command, args []string) {
 	core.InitClient()
-	resp, datac := core.GetAllData()
+	resp, datac := core.GetDataWithPrefix(findPrefix)
 	appendBufferForFind(resp, datac, os.Stdout)
 }
 

@@ -9,12 +9,10 @@ import (
 	cobracompletefig "github.com/withfig/autocomplete-tools/integrations/cobra"
 )
 
-var (
-	rootCmd = &cobra.Command{
-		Use:   "etcdctl+",
-		Short: "etcd data analysis tool",
-	}
-)
+var rootCmd = &cobra.Command{
+	Use:   "etcdctl+",
+	Short: "etcd data analysis tool",
+}
 
 func Start() {
 	if err := rootCmd.Execute(); err != nil {
@@ -41,5 +39,6 @@ func init() {
 	rootCmd.AddCommand(NewFindCmd())
 	rootCmd.AddCommand(NewDecodeCmd())
 	rootCmd.AddCommand(NewRenameCmd())
+	rootCmd.AddCommand(NewUnmarshalCmd())
 	rootCmd.AddCommand(cobracompletefig.CreateCompletionSpecCommand())
 }

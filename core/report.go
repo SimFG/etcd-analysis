@@ -44,7 +44,7 @@ type report struct {
 	bucketCount int
 	sizeOf      SizeOf
 	writer      *uilive.Writer
-	processOver atomic.Bool
+	processOver atomic.Value
 	dynamicOnce sync.Once
 }
 
@@ -119,7 +119,7 @@ func (r *report) DynamicOutput() {
 	r.dynamicOnce.Do(func() {
 		go func() {
 			for {
-				if r.processOver.Load() {
+				if r.processOver.Load().(bool) {
 					return
 				}
 				r.dynamicString()
@@ -184,7 +184,7 @@ func (r *report) histogram() string {
 }
 
 func NewReport(bc int, of SizeOf) Report {
-	return &report{
+	r := &report{
 		results: make(chan []*mvccpb.KeyValue),
 		stats: Stats{
 			Largest:     -1,
@@ -195,4 +195,7 @@ func NewReport(bc int, of SizeOf) Report {
 		sizeOf:      of,
 		writer:      uilive.New(),
 	}
+	r.processOver.Store(false)
+
+	return r
 }

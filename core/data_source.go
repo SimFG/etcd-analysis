@@ -13,9 +13,7 @@ const (
 	readCount = 1000
 )
 
-var (
-	client *clientv3.Client
-)
+var client *clientv3.Client
 
 func InitClient() *clientv3.Client {
 	connEndpoints := []string{"127.0.0.1:2379"}
@@ -51,18 +49,30 @@ func InitClient() *clientv3.Client {
 	return client
 }
 
-func GetAllData() (*clientv3.GetResponse, <-chan []*mvccpb.KeyValue) {
+func GetDataWithPrefix(prefix string) (*clientv3.GetResponse, <-chan []*mvccpb.KeyValue) {
 	c := make(chan []*mvccpb.KeyValue, 10)
 
 	getFunc := func(start string, count int64) *clientv3.GetResponse {
-		resp, err := EtcdGet(client, start, clientv3.WithFromKey(),
+		opts := []clientv3.OpOption{
 			clientv3.WithSerializable(),
-			//clientv3.WithSort(clientv3.SortByKey, clientv3.SortAscend),
-			clientv3.WithLimit(count))
+			clientv3.WithLimit(count),
+		}
+		if prefix != "" {
+			opts = append(opts, clientv3.WithPrefix())
+		} else {
+			opts = append(opts, clientv3.WithFromKey())
+		}
+		resp, err := EtcdGet(client, start, opts...)
 		if err != nil {
 			Exit(err)
 		}
 		return resp
+	}
+	if prefix != "" {
+		resp := getFunc(prefix, 0)
+		c <- resp.Kvs
+		close(c)
+		return resp, c
 	}
 	resp := getFunc(EmptyChar(), 2)
 	c <- resp.Kvs
@@ -86,4 +96,8 @@ func GetAllData() (*clientv3.GetResponse, <-chan []*mvccpb.KeyValue) {
 	}(resp)
 
 	return resp, c
+}
+
+func GetAllData() (*clientv3.GetResponse, <-chan []*mvccpb.KeyValue) {
+	return GetDataWithPrefix("")
 }

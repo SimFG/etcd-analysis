@@ -3,26 +3,59 @@ etcd is generally used to store system metadata or service discovery, and is sui
 
 When testing the stability of the system, it may be necessary to pay attention to the size distribution of the data currently stored in etcd by the system. That's why this project came about.
 
+# 🌟 New Function: unmarshal
+
+**implement proto.Unmarshal byte array through proto source file**
+
+Generally speaking, we store some system meta formation in etcd, and the stored pseudocode is:
+
+```go
+segBytes, _ := proto.Marshal(*foopb.SystemInfo{})
+etcdclient.put("foo/system", segBytes)
+```
+
+When we query, we cannot clearly see the value in the struct. Of course, it can be easily implemented through code. You only need to import the relevant pb file and then call the proto.Unmarshal method to see the clear value. But many times we may not have the environment, or writing this part of the code will waste a little time.
+
+The unmarshal instruction will solve this trouble. You only need to copy the proto source file to quickly view the value in the struct. The example:
+
+```
+➜ etcdctl+ unmarshal --key by-dev/meta/channelwatch/4/by-dev-rootcoord-dml_0_445337303926193462v0 --import-path ../birdwatcher/proto/v2.2 --proto ../birdwatcher/proto/v2.2/data_coord.proto --full-message-name milvus.protov2.data.ChannelWatchInfo
+
+vchan: collectionID:445337303926193462 channelName:"by-dev-rootcoord-dml_0_445337303926193462v0" seek_position:<channel_name:"by-dev-rootcoord-dml_0" msgID:"\010?\020\223\261\002\030\000 \000" msgGroup:"datanode-3-by-dev-rootcoord-dml_0_445337303926193462v0-true" timestamp:445342561987461121> flushedSegmentIds:445337303926393472
+startTs: 1698912217
+state: 3
+timeoutTs: 0
+schema: name:"foo" description:"hello_milvus is the simplest demo to introduce the APIs" fields:<fieldID:100 name:"pk" is_primary_key:true data_type:VarChar type_params:<key:"max_length" value:"100">> fields:<fieldID:101 name:"random" data_type:Double> fields:<fieldID:102 name:"embeddings" data_type:FloatVector type_params:<key:"dim" value:"8">> fields:<name:"RowID" description:"row id" data_type:Int64> fields:<fieldID:1 name:"Timestamp" description:"time stamp" data_type:Int64>
+progress: 0
+```
+
 <details>
 <summary><h1>Getting started</h1></summary>
 
 ## Getting the source code
+
 Clone this code repository
+
 ```shell
 $ git clone https://github.com/SimFG/etcd-analysis.git
 ```
+
 ## Build
+
 Compile code into executable
+
 ```shell
 $ go build -o etcdctl+
 ```
+
 ## Usage
+
 Get help with functions
+
 ```shell
 $ etcdctl+ distribute -h
 ```
-## Auto complete config
-Download the [etcdctl+.ts](ts/etcdctl+.ts), and [config it](https://simfg.github.io/fig). You can also use the [etcdctl.ts](https://simfg.github.io/etcdctl.ts) config the `etcdctl` command.
+
 </details>
 
 <details open>
@@ -34,10 +67,12 @@ Download the [etcdctl+.ts](ts/etcdctl+.ts), and [config it](https://simfg.github
 3. **find** Get key based on certain characters
 4. **leader** Get the leader node info
 5. **clear** Clear all the etcd data
-6. **decode** Decode the etcd value that is encoded 
+6. **decode** Base64Decode the etcd value that is encoded 
 7. **rename** Rename the etcd data key
+8. **unmarshal** Implement proto.Unmarshal byte array through proto source file
 
 ## distribute
+
 View data distribution in etcd according to the `key` size , `value` size or `key + value` size by setting the `type` command param.
 
 ![distribute.gif](pic/20230225-150850.gif)
@@ -99,7 +134,9 @@ Kv List
 ```
 
 ## find
+
 Get key based on certain characters
+
 ```shell
 $ ./etcdctl+ find --key=index
 Kv List
@@ -112,7 +149,9 @@ Kv List
 ```
 
 ## leader
+
 Get the leader node info
+
 ```shell
 $ etcdctl+ leader
 
@@ -121,12 +160,27 @@ ClientUrls: [http://127.0.0.1:2379]
 ```
 
 ## clear
+
 Clear all etcd data
+
 ```shell
 $ etcdctl+ clear
 
 Clear All Data, (Y/n):
 ```
+
+## unmarshal
+
+Implement proto.Unmarshal byte array through proto source file.
+
+```
+$ etcdctl+ unmarshal --key by-dev/meta/channelwatch/4/by-dev-rootcoord-dml_0_445337303926193462v0 --import-path ../birdwatcher/proto/v2.2 --proto ../birdwatcher/proto/v2.2/data_coord.proto --full-message-name milvus.protov2.data.ChannelWatchInfo
+```
+
+- key: the etcd full key
+- import-path: all proto directory
+- proto: the proto file path where the message is located
+- full-message-name: the full message name, usually a combination of proto package name and message
 
 </details>
 

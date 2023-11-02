@@ -3,12 +3,11 @@ package cmd
 import (
 	"encoding/base64"
 	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
-var (
-	encodedValue string
-)
+var encodedValue string
 
 func NewDecodeCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -28,5 +27,4 @@ func decodeFunc(cmd *cobra.Command, args []string) {
 	} else {
 		fmt.Println("decode value:\n", string(v))
 	}
-
 }
